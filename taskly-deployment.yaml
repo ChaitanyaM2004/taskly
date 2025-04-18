@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskly-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taskly
+  template:
+    metadata:
+      labels:
+        app: taskly
+    spec:
+      containers:
+      - name: taskly-container
+        image: cmantri2004/taskly-backend
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI
+          value: "mongodb+srv://chaitu_0904:1234@taskly.m3tks.mongodb.net/?retryWrites=true&w=majority&appName=taskly"
+        - name: JWT_SECRET
+          value: "secretkey"
