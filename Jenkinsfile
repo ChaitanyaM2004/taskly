@@ -2,33 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Install Client Dependencies') {
+        stage('Install Frontend Dependencies') {
             steps {
-                dir('client') {
+                dir('frontend') {
                     bat 'npm install'
                 }
             }
         }
 
-        stage('Install Server Dependencies') {
+        stage('Install Backend Dependencies') {
             steps {
-                dir('server') {
+                dir('backend') {
                     bat 'npm install'
                 }
             }
         }
 
-        stage('Run Client Tests') {
+        stage('Run Frontend Tests') {
             steps {
-                dir('client') {
+                dir('frontend') {
                     bat 'npm test || exit 0' // allows pipeline to continue even if tests fail (optional)
                 }
             }
         }
 
-        stage('Run Server Tests') {
+        stage('Run Backend Tests') {
             steps {
-                dir('server') {
+                dir('backend') {
                     bat 'npm test || exit 0'
                 }
             }
