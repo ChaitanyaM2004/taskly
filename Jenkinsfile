@@ -1,5 +1,6 @@
 pipeline {
     agent {
+        label 'docker' // Use a Docker agent for the pipeline
         docker {
             image 'node:18'
             label 'docker' // Optional: You can specify a label if your Jenkins agent requires it.
