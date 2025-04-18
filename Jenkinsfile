@@ -2,6 +2,8 @@ pipeline {
     agent {
         docker {
             image 'node:18'
+            label 'docker' // Optional: You can specify a label if your Jenkins agent requires it.
+            args '--rm'    // Optional: Clean up the container after the build is finished.
         }
     }
 
