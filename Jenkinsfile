@@ -29,7 +29,8 @@ pipeline {
                 dir('frontend') {
                     script {
                         // Run frontend tests in a Docker container
-                        docker.image('frontend-image').inside('-v //c/ProgramData/Jenkins/.jenkins/jobs/Taskly-CI/workspace/frontend:/workspace/frontend -w /workspace/frontend') {
+                        docker.image('frontend-image').inside(
+                            '-v //c/ProgramData/Jenkins/.jenkins/jobs/Taskly-CI/workspace/frontend:/workspace/frontend -w /workspace/frontend') {
                             bat 'npm test || exit 0' // allows pipeline to continue even if tests fail (optional)
                         }
                     }
@@ -42,7 +43,8 @@ pipeline {
                 dir('backend') {
                     script {
                         // Run backend tests in a Docker container
-                        docker.image('backend-image').inside('-v //c/ProgramData/Jenkins/.jenkins/jobs/Taskly-CI/workspace/backend:/workspace/backend -w /workspace/backend') {
+                        docker.image('backend-image').inside(
+                            '-v //c/ProgramData/Jenkins/.jenkins/jobs/Taskly-CI/workspace/backend:/workspace/backend -w /workspace/backend') {
                             bat 'npm test || exit 0'
                         }
                     }
