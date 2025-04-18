@@ -1,0 +1,22 @@
+# Dependency folders
+node_modules
+npm-debug.log
+
+# Build output
+dist
+build
+
+# Environment variables
+.env
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode
+.idea
+
+# OS metadata
+*.swp
+*.swo

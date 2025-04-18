@@ -1,14 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const taskRoutes = require("./routes/taskRoutes.js");
-const userRoutes = require("./routes/userRoutes.js"); // Import user routes
 const { PORT, mongoDBURL } = require("./config.js");
-
+const AuthRoutes = require("./routes/AuthRoutes.js");
 const app = express();
 
 
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors());
 app.get('/',(req,res)=>{
     res.set('Cache-Control', 'no-store');
@@ -16,13 +17,14 @@ app.get('/',(req,res)=>{
    });
 
 app.use('/tasks',taskRoutes);
-app.use('/users',userRoutes);
+app.use('/auth',AuthRoutes);
+
 
 mongoose
  .connect(mongoDBURL)
  .then(()=>{
     console.log("connected to the db");
-    app.listen(PORT,()=>{
+    app.listen(PORT,'0.0.0.0',()=>{
         console.log(`Server is running at PORT ${PORT}`);
     })
 
