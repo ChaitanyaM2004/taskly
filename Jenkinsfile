@@ -2,61 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('Build Frontend Docker Image') {
+        stage('Install Frontend Dependencies') {
             steps {
                 dir('frontend') {
-                    script {
-                        // Build the frontend Docker image
-                        docker.build('frontend-image')
-                    }
+                    bat 'npm install'
                 }
             }
         }
 
-        stage('Build Backend Docker Image') {
+        stage('Install Backend Dependencies') {
             steps {
                 dir('backend') {
-                    script {
-                        // Build the backend Docker image
-                        docker.build('backend-image')
-                    }
+                    bat 'npm install'
                 }
             }
         }
 
-        stage('Run Frontend Tests in Docker') {
+        stage('Run Frontend Tests') {
             steps {
                 dir('frontend') {
-                    script {
-                        // Run frontend tests in a Docker container
-                        docker.image('frontend-image').inside(
-                            '-v //c/ProgramData/Jenkins/.jenkins/jobs/Taskly-CI/workspace/frontend:/workspace/frontend -w /workspace/frontend') {
-                            bat 'npm test || exit 0' // allows pipeline to continue even if tests fail (optional)
-                        }
-                    }
+                    bat 'npm test || exit 0' // allows pipeline to continue even if tests fail (optional)
                 }
             }
         }
 
-        stage('Run Backend Tests in Docker') {
+        stage('Run Backend Tests') {
             steps {
                 dir('backend') {
-                    script {
-                        // Run backend tests in a Docker container
-                        docker.image('backend-image').inside(
-                            '-v //c/ProgramData/Jenkins/.jenkins/jobs/Taskly-CI/workspace/backend:/workspace/backend -w /workspace/backend') {
-                            bat 'npm test || exit 0'
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Cleanup Docker Images') {
-            steps {
-                script {
-                    // Clean up Docker images after the pipeline finishes
-                    sh 'docker rmi frontend-image backend-image || true'
+                    bat 'npm test || exit 0'
                 }
             }
         }
