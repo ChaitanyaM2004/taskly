@@ -2,34 +2,59 @@ pipeline {
     agent any
 
     stages {
-        stage('Install Frontend Dependencies') {
+        stage('Build Frontend Docker Image') {
             steps {
                 dir('frontend') {
-                    bat 'npm install'
+                    script {
+                        // Build the frontend Docker image
+                        docker.build('frontend-image')
+                    }
                 }
             }
         }
 
-        stage('Install Backend Dependencies') {
+        stage('Build Backend Docker Image') {
             steps {
                 dir('backend') {
-                    bat 'npm install'
+                    script {
+                        // Build the backend Docker image
+                        docker.build('backend-image')
+                    }
                 }
             }
         }
 
-        stage('Run Frontend Tests') {
+        stage('Run Frontend Tests in Docker') {
             steps {
                 dir('frontend') {
-                    bat 'npm test || exit 0' // allows pipeline to continue even if tests fail (optional)
+                    script {
+                        // Run frontend tests in a Docker container
+                        docker.image('frontend-image').inside {
+                            bat 'npm test || exit 0' // allows pipeline to continue even if tests fail (optional)
+                        }
+                    }
                 }
             }
         }
 
-        stage('Run Backend Tests') {
+        stage('Run Backend Tests in Docker') {
             steps {
                 dir('backend') {
-                    bat 'npm test || exit 0'
+                    script {
+                        // Run backend tests in a Docker container
+                        docker.image('backend-image').inside {
+                            bat 'npm test || exit 0'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Cleanup Docker Images') {
+            steps {
+                script {
+                    // Clean up Docker images after the pipeline finishes
+                    sh 'docker rmi frontend-image backend-image || true'
                 }
             }
         }
